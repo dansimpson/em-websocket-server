@@ -115,7 +115,6 @@ class TickTackToeServer < WebSocketServer
 	attr_accessor :game_id, :key, :status_key
 	
 	def on_connect
-		puts "C"
 		@status_key = $status.subscribe do |c|
 			send_user_count c
 		end
@@ -123,12 +122,9 @@ class TickTackToeServer < WebSocketServer
 	end
 
 	def on_disconnect
-		puts "DC"
-		if $games.key?(game_id)
-			$games.delete(game_id)
-		end
-		$status.decrement
 		$status.unsubscribe @status_key
+		$status.decrement
+		delete_game!
 	end
 
 	def on_receive data
@@ -165,6 +161,12 @@ class TickTackToeServer < WebSocketServer
 		end
 	end
 
+	def delete_game!
+		if $games.key?(game_id)
+			$games.delete(game_id)
+		end
+	end
+	
 	def game
 		$games[game_id]
 	end
@@ -174,6 +176,7 @@ class TickTackToeServer < WebSocketServer
 	end
 
 	def game_over!
+		delete_game!
 		send_command "game_over"
 	end
 	
