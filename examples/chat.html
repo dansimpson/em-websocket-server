@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+	<title>em-websocket-server test</title>
+</head>
+<body>
+
+
+<h1>em-websocket-server chat demo</h1>
+<div id="chat">connecting....</div>
+
+
+
+<script>
+
+	var webSocket = new WebSocket('ws://192.168.0.2:8000/time');
+
+	webSocket.onopen = function(event){
+		document.getElementById('chat').innerHTML = 'connected';
+	};
+
+	webSocket.onmessage = function(event){
+		var object = JSON.parse(event.data);
+		document.getElementById('chat').innerHTML += "<b>" + object.user + "</b>" + object.message;
+	};
+
+	webSocket.onclose = function(event){
+		document.getElementById('chat').innerHTML = 'socket closed';
+	};
+	
+	document.getElementById('chatty').addEventListener("onkeypress", function() {
+		alert("X")
+	});
+	
+</script>
+
+<input type="text" onkeypress="webSocket.send('hi');" />
+
+</body>
+</html>
