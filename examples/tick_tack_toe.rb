@@ -4,19 +4,42 @@ require 'rubygems'
 require 'em-websocket-server'
 require 'json'
 require 'uuid'
+require 'pp'
 
 $games   = {}
 $waiting = nil
+$status  = nil
+
+class StatusChannel < EM::Channel
+
+	def initialize
+		super
+		@count = 0
+	end
+	
+	def increment
+		@count += 1
+		push @count
+	end
+	
+	def decrement
+		@count -= 1
+		push @count
+	end
+end
 
 class Game < EM::Channel
 
-	attr_accessor :id, :p1, :p2, :current
+	attr_accessor :id, :player1, :player2, :current, :matrix
 
-	def initialize p1, p2
+	
+
+	def initialize player1, player2
 		super()
-		@id = UUID.new
-		@p1 = p1
-		@p2 = p2
+		@id 		= UUID.new
+		@player1 	= player1
+		@player2 	= player2
+		@matrix 	= (0..2).collect { [false, false, false] }
 	end
 	
 	def set_turn p
@@ -26,40 +49,90 @@ class Game < EM::Channel
 	
 	def start!
 		@current = nil
+		@player1.start!
+		@player2.start!
 		toggle
 	end
 	
 	def move p, data
 		if @current == p
-			c = @p1 == p ? "x" : "o"
-			@p1.send_move(c, data)
-			@p2.send_move(c, data)
-			toggle
+			unless @matrix[data["x"].to_i][data["y"].to_i]
+				@matrix[data["x"].to_i][data["y"].to_i] = p.key
+			
+				@player1.send_move(p.key, data)
+				@player2.send_move(p.key, data)
+				
+				
+				winner  = has_winner?
+				full	= full?
+				
+				if winner || full
+					@player1.send_command("game_over")
+					@player2.send_command("game_over")
+					if winner
+						p.send_command("win")
+						opponent(p).send_command("loss")
+					else full?
+						@player1.send_command("draw")
+						@player2.send_command("draw")
+					end
+				else
+					toggle
+				end
+			end
 		end
 	end
 
+	def full?
+		@matrix.each do |row|
+			row.each do |col|
+				return false unless col
+			end
+		end
+		return true
+	end
+
+	def has_winner?
+		return true if @matrix[1][1] && (@matrix[0][0] == @matrix[1][1]) && (@matrix[1][1] == @matrix[2][2])
+		return true if @matrix[1][1] && (@matrix[0][2] == @matrix[1][1]) && (@matrix[1][1] == @matrix[2][0])
+		@matrix.each do |row|
+			return true if row[1] && (row[0] == row[1]) && (row[1] == row[2])
+		end
+		return false
+	end
+
+	def opponent p
+		@player1 == p ? @player2 : @player1
+	end
+
 	def toggle
-		set_turn(@current == @p1 ? @p2 : @p1)
+		set_turn(@current == @player1 ? @player2 : @player1)
 	end
 end
 
 class TickTackToeServer < WebSocketServer
 
-	attr_accessor :game_id
+	attr_accessor :game_id, :key, :status_key
 	
 	def on_connect
+		puts "C"
+		@status_key = $status.subscribe do |c|
+			send_user_count c
+		end
+		$status.increment
 	end
 
 	def on_disconnect
+		puts "DC"
 		if $games.key?(game_id)
-			$games.delete!(game_id)
+			$games.delete(game_id)
 		end
+		$status.decrement
+		$status.unsubscribe @status_key
 	end
 
 	def on_receive data
 
-		puts data
-		
 		begin
 			msg = JSON.parse(data)
 		rescue
@@ -75,8 +148,11 @@ class TickTackToeServer < WebSocketServer
 			else
 				$waiting.pop do |opponent|
 					game = Game.new(self, opponent)
+					self.key = "X"
+					opponent.key = "O"
 					self.game_id = opponent.game_id = game.id
 					game.start!
+					$games[game_id] = game
 				end
 			end
 		when "move"
@@ -106,11 +182,21 @@ class TickTackToeServer < WebSocketServer
 	end
 	
 	def send_move key, data
-	
+		send_message({:msg => "move", :key => key, :data => data}.to_json)
 	end
 
 	def send_command cmd
 		send_message({:msg => cmd}.to_json)
+	end
+	
+	def send_user_count count
+		send_message({:msg => :user_count, :data => count}.to_json)
+	end
+	
+	
+	def send_message msg
+		super msg
+		puts "Sent: #{msg}"
 	end
 end
 
@@ -119,6 +205,8 @@ EM.epoll
 EM.set_descriptor_table_size(10240)
 
 EM.run do
-	$waiting = EM::Queue.new
+	$waiting  = EM::Queue.new
+	$status = StatusChannel.new
+
 	EM.start_server "0.0.0.0", 8000, TickTackToeServer
 end

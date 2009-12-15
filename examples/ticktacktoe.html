@@ -19,6 +19,11 @@
 	webSocket.onmessage = function(event){
 		var object = JSON.parse(event.data);
 		console.log(object);
+		
+		if(object.msg == "turn") {
+			//webSocket.send("{\"msg\":\"move\", \"data\":{\"x\":4}}");
+		}
+		
 		document.getElementById('time').innerHTML = object.time;
 	};
 	
