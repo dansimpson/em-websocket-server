@@ -24,6 +24,10 @@
       height: 100px;
       padding: 5px;
       background: #000;
+      color: #FFF;
+      font-size: 100px;
+      text-align: center;
+      vertical-align: middle;
     }
   </style>
 </head>
@@ -31,21 +35,14 @@
 
 <h1>Tic Tac Toe</h1>
 
+<div id="user-count"></div>
+<div id="game-stats"></div>
 <div id="status"></div>
 
-<div id="navigation">
-  <!-- <p>Your Username: <input id="username" type="text" name="username" value="" /></p> -->
-
-  <ul>
-    <!-- <li><a href="#" id="new-game">Start a New Game</a></li> -->
-    <li><a href="#" id="join-game">Join a Game</a></li>
-  </ul>
-</div>
-
 <table id="game-board">
-  <tr><td id="cell-0-0" class="open cell"></td><td id="cell-1-0" class="open cell"></td><td id="cell-2-0" class="open cell"></td></tr>
-  <tr><td id="cell-0-1" class="open cell"></td><td id="cell-1-1" class="open cell"></td><td id="cell-2-1" class="open cell"></td></tr>
-  <tr><td id="cell-0-2" class="open cell"></td><td id="cell-1-2" class="open cell"></td><td id="cell-2-2" class="open cell"></td></tr>
+  <tr><td id="cell-0-0" class="cell"></td><td id="cell-1-0" class="cell"></td><td id="cell-2-0" class="cell"></td></tr>
+  <tr><td id="cell-0-1" class="cell"></td><td id="cell-1-1" class="cell"></td><td id="cell-2-1" class="cell"></td></tr>
+  <tr><td id="cell-0-2" class="cell"></td><td id="cell-1-2" class="cell"></td><td id="cell-2-2" class="cell"></td></tr>
 </table>
 
 <script type="text/javascript" charset="utf-8" src="mootools-1.2.4-core-nc.js"></script>
