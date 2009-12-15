@@ -1,0 +1,54 @@
+<!doctype html>
+
+<html>
+<head>
+  <title>Tic Tac Toe</title>
+  <meta name="author" content="Jordan Fowler">
+
+  <style type="text/css" media="screen">
+    #navigation ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 25px 0px;
+    }
+
+    #navigation ul li {
+      display: inline;
+      padding: 0;
+      margin: 0;
+      margin-right: 10px;
+    }
+
+    #game-board .cell {
+      width: 100px;
+      height: 100px;
+      padding: 5px;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Tic Tac Toe</h1>
+
+<div id="status"></div>
+
+<div id="navigation">
+  <!-- <p>Your Username: <input id="username" type="text" name="username" value="" /></p> -->
+
+  <ul>
+    <!-- <li><a href="#" id="new-game">Start a New Game</a></li> -->
+    <li><a href="#" id="join-game">Join a Game</a></li>
+  </ul>
+</div>
+
+<table id="game-board">
+  <tr><td id="cell-0-0" class="open cell"></td><td id="cell-1-0" class="open cell"></td><td id="cell-2-0" class="open cell"></td></tr>
+  <tr><td id="cell-0-1" class="open cell"></td><td id="cell-1-1" class="open cell"></td><td id="cell-2-1" class="open cell"></td></tr>
+  <tr><td id="cell-0-2" class="open cell"></td><td id="cell-1-2" class="open cell"></td><td id="cell-2-2" class="open cell"></td></tr>
+</table>
+
+<script type="text/javascript" charset="utf-8" src="mootools-1.2.4-core-nc.js"></script>
+<script type="text/javascript" charset="utf-8" src="tictactoe.js"></script>
+</body>
+</html>
