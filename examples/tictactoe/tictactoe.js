@@ -63,7 +63,9 @@ var TicTacToe = new Class({
   },
 
   reset: function() {
-    
+    $$('.cell').set('text', '');
+
+    this.join();
   },
 
   onQueued: function(command) {
