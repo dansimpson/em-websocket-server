@@ -25,9 +25,6 @@ class ChatServer < WebSocketServer
 end
 
 
-EM.epoll
-EM.set_descriptor_table_size(10240)
-
 EM.run do
 	EM.start_server "0.0.0.0", 8000, ChatServer
 end

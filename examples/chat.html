@@ -9,8 +9,6 @@
 <h1>em-websocket-server chat demo</h1>
 <div id="chat">connecting....</div>
 
-
-
 <script>
 
 	var webSocket = new WebSocket('ws://192.168.0.2:8000/time');
@@ -20,8 +18,7 @@
 	};
 
 	webSocket.onmessage = function(event){
-		var object = JSON.parse(event.data);
-		document.getElementById('chat').innerHTML += "<b>" + object.user + "</b>" + object.message;
+		document.getElementById('chat').innerHTML += "<br/>" + event.data;
 	};
 
 	webSocket.onclose = function(event){
@@ -29,12 +26,12 @@
 	};
 	
 	document.getElementById('chatty').addEventListener("onkeypress", function() {
-		alert("X")
+		webSocket.send("test");
 	});
 	
 </script>
 
-<input type="text" onkeypress="webSocket.send('hi');" />
+<a href="#" onclick="webSocket.send('test')">Send Test</a>
 
 </body>
 </html>

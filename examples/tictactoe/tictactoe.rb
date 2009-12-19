@@ -30,16 +30,14 @@ end
 
 class Game < EM::Channel
 
-	attr_accessor :id, :player1, :player2, :current, :matrix
-
-	
+	attr_accessor :id, :player1, :player2, :current, :grid
 
 	def initialize player1, player2
 		super()
 		@id 		= UUID.new
 		@player1 	= player1
 		@player2 	= player2
-		@matrix 	= (0..2).collect { [false, false, false] }
+		@grid 		= Matrix.diagonal(0,0,0)
 	end
 	
 	def set_turn p

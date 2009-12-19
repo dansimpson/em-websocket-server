@@ -91,8 +91,8 @@ class WebSocketServer < EM::Connection
 	private
 
 	# when the connection receives data from the client
-	# we either handshake, accept the start command
-	# or handle the message at the app layer
+	# we either handshake or handle the message at 
+	# the app layer
 	def receive_data data
 		unless @connected
 			handshake data
