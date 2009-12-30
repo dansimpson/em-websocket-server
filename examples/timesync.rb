@@ -1,33 +1,35 @@
 $:.unshift File.dirname(__FILE__) + '/../lib'
 
 require 'rubygems'
-require 'em-websocket-server'
+require 'web_socket'
 require 'json'
 
-class TimeServer < WebSocketServer
+class TimeServer < WebSocket::Server
 
 	def on_connect
-		@timer = EM.add_periodic_timer(5) do
-			sync_time
-		end
+	  puts "Connection Accepted"
+		@timer = EM.add_periodic_timer(5, EM.Callback(self, :sync_time))
 	end
 
 	def on_disconnect
-		@timer
+	  puts "Connection released"
+		EM.cancel_timer @timer
 	end
 
 	def on_receive msg
-		puts "msg rcv"
 	end
 
 	def sync_time
+	  puts "Hi"
 		send_message({ :time => Time.now }.to_json)
 	end
 
 end
 
 
-EM.epoll
+EM.epoll  = true if EM.epoll?
+EM.kqueue = true if EM.kqueue?
+
 EM.set_descriptor_table_size(10240)
 
 EM.run do

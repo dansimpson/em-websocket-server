@@ -33,7 +33,7 @@ Not yet... coming soon
 	#create a channel for pub sub
 	$chatroom = EM::Channel.new
 	
-	class ChatServer < WebSocketServer
+	class ChatServer < WebSocket::Server
 	
 		#subscribe to the channel on client connect
 		def on_connect

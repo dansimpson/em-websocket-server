@@ -9,7 +9,7 @@
 <h2 id="time">opening socket</h2>
 
 <script>
-	var webSocket = new WebSocket('ws://192.168.0.2:8000/time');
+	var webSocket = new WebSocket('ws://localhost:8000/time');
 	
 	webSocket.onopen = function(event){
 		document.getElementById('time').innerHTML = 'waiting for socket';

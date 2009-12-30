@@ -18,7 +18,7 @@ var TicTacToe = new Class({
 
   initialize: function() {
     if (TicTacToe.connection == null) {
-      TicTacToe.connection = new WebSocket('ws://192.168.0.2:8000/tictactoe');
+      TicTacToe.connection = new WebSocket('ws://localhost:8000/tictactoe');
     };
 
     TicTacToe.connection.onopen = this.join.bind(this);

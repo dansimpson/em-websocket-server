@@ -1,7 +1,7 @@
 $:.unshift File.dirname(__FILE__) + '/../../lib'
 
 require 'rubygems'
-require 'em-websocket-server'
+require 'web_socket'
 require 'json'
 require 'uuid'
 require 'pp'
@@ -108,7 +108,7 @@ class Game < EM::Channel
 	end
 end
 
-class TickTackToeServer < WebSocketServer
+class TickTackToeServer < WebSocket::Server
 
 	attr_accessor :game_id, :key, :status_key
 	
