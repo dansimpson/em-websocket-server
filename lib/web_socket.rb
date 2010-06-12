@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'eventmachine'
+require 'digest'
 require 'pp'
 
 module WebSocket
