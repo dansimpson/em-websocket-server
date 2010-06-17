@@ -42,7 +42,9 @@ module WebSocket
 			unless @connected
 				handshake data
 			else
-				on_receive Frame.decode(data)
+        while msg = data.slice!(/\000([^\377]*)\377/)
+          on_receive Frame.decode(msg)
+        end
 			end
 		end
 

@@ -4,6 +4,7 @@ require 'digest'
 require 'pp'
 
 module WebSocket
+  VERSION = 0.13
 end
 
 require 'web_socket/util.rb'

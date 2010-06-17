@@ -4,17 +4,6 @@
 
 ##Installation
 
-If you don't have gemcutter
-
-	gem install gemcutter
-	gem tumble
-
-Otherwise
-
-	gem install em-websocket-server
-
-Or
-
 	gem install em-websocket-server -s http://gemcutter.org
 
 ##Dependencies
@@ -27,7 +16,7 @@ Not yet... coming soon
 ##Quick Example
 
 	require 'rubygems'
-	require 'em-websocket-server'
+	require 'web_socket'
 	require 'json'
 
 	#create a channel for pub sub
@@ -61,3 +50,7 @@ Not yet... coming soon
 	EM.run do
 		EM.start_server "0.0.0.0", 8000, ChatServer
 	end
+	
+##Thanks
+sidonath
+TheBreeze
