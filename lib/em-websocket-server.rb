@@ -5,8 +5,8 @@ require "digest"
 
 module EM
   module WebSocket
-    Version = 0.50
-    Log     = Logger.new STDOUT
+    Version = 0.15
+    Log = Logger.new STDOUT  
   end
 end
 

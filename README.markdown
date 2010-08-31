@@ -68,9 +68,9 @@ macros are used to configure your application server.
         EM::WebSocket::Log.debug "Connected"
       end
 
-    	def on_receive msg
-    	  send_message msg
-    	end
+      def on_receive msg
+        send_message msg
+      end
 
     end
 
