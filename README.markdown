@@ -17,95 +17,94 @@ executed in the context of said instance.
 
 ##Methods to override:
   
-  #called on exception
-  on_error error
+    #called on exception
+    on_error error
   
-  #called when a client sends a message
-  on_receive msg
+    #called when a client sends a message
+    on_receive msg
   
-  #called when a client connects
-  on_connect
+    #called when a client connects
+    on_connect
   
-  #called when a client is disconnected
-  on_disconnect
+    #called when a client is disconnected
+    on_disconnect
   
 ##Other useful methods
 
-  #send a message
-  send_message msg
+    #send a message
+    send_message msg
   
-  #close the connection
-  unbind
+    #close the connection
+    unbind
 
 ##Macros
 macros are used to configure your application server.
 
-  class MySweetHandler < EM::WebSocket::Server
+    class MySweetHandler < EM::WebSocket::Server
     
-    #secure incoming connections
-    secure
+      #secure incoming connections
+      secure
   
-    #secure incoming connections, with given key/cert
-    secure {
-      :private_key_file => "/path/to/private/key",
-      :cert_chain_file => "/path/to/ssl/certificate"
-    }
+      #secure incoming connections, with given key/cert
+      secure {
+        :private_key_file => "/path/to/private/key",
+        :cert_chain_file => "/path/to/ssl/certificate"
+      }
   
-    #provide a flash socket policy
-    flash_policy "/usr/local/policies/domain.com/crossdomain.xml"    
+      #provide a flash socket policy
+      flash_policy "/usr/local/policies/domain.com/crossdomain.xml"    
     
-  end
+    end
 
 
 ##Quick Example
 
-  require "rubygems"
-  require "em-websocket-server"
+    require "rubygems"
+    require "em-websocket-server"
 
-  class EchoServer < EM::WebSocket::Server
+    class EchoServer < EM::WebSocket::Server
 
-    def on_connect
-      EM::WebSocket::Log.debug "Connected"
+      def on_connect
+        EM::WebSocket::Log.debug "Connected"
+      end
+
+    	def on_receive msg
+    	  send_message msg
+    	end
+
     end
 
-  	def on_receive msg
-  	  send_message msg
-  	end
-
-  end
-
-  EM.run do
-  	EM.start_server "0.0.0.0", 8000, EchoServer
-  end
+    EM.run do
+    	EM.start_server "0.0.0.0", 8000, EchoServer
+    end
 
 ##SSL
 
-  class SecureEchoServer < EM::WebSocket::Server
+    class SecureEchoServer < EM::WebSocket::Server
 
-    #provide cert and key
-    secure {
-      :private_key_file => "/path/to/private/key",
-      :cert_chain_file => "/path/to/ssl/certificate"
-    }
+      #provide cert and key
+      secure {
+        :private_key_file => "/path/to/private/key",
+        :cert_chain_file => "/path/to/ssl/certificate"
+      }
     
-    ...
+      ...
   
-  end
+    end
 
-  EM.run do
-  	EM.start_server "0.0.0.0", 443, SecureEchoServer
-  end
+    EM.run do
+    	EM.start_server "0.0.0.0", 443, SecureEchoServer
+    end
 
 ##Custom Flash Policy
 
-  class FlashyEchoServer < EM::WebSocket::Server
-    flash_policy "/usr/local/policies/domain.com/crossdomain.xml"
-  end
+    class FlashyEchoServer < EM::WebSocket::Server
+      flash_policy "/usr/local/policies/domain.com/crossdomain.xml"
+    end
 
-  EM.run do
-  	EM.start_server "0.0.0.0", 8000, FlashyEchoServer
-  end
-
+    EM.run do
+    	EM.start_server "0.0.0.0", 8000, FlashyEchoServer
+    end
 
 ##Todo
   * Testing
