@@ -69,7 +69,7 @@ module EM
             on_receive msg.gsub(Frame, "")
           end
         else        
-          if data =~ /</
+          if data =~ /\A<policy-file-request\s*\/>/
             Log.debug "Sending flash policy #{self.class.policy_content}"
             send_data self.class.policy
             close_connection_after_writing
