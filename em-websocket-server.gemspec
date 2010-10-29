@@ -1,6 +1,6 @@
 spec = Gem::Specification.new do |s|
   s.name = 'em-websocket-server'
-  s.version = '0.15'
+  s.version = '0.15.1'
   s.date = '2010-08-30'
   s.summary = 'An evented ruby websocket server built on top of EventMachine'
   s.email = "dan.simpson@gmail.com"
